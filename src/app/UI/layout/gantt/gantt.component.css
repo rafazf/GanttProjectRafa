@@ -1,0 +1,19 @@
+
+.calendario {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .calendario th, .calendario td {
+    border: 1px solid #ddd;
+    padding-inline: 8px;
+    text-align: center;
+  
+    width: 30px; /* Ancho fijo de la celda */
+    height: 30px; 
+    overflow: hidden;
+  
+    white-space: nowrap;
+  }
+  .calendario th {
+    background-color: #f2f2f2;
+  }

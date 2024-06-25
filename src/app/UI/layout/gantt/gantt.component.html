@@ -1,0 +1,86 @@
+<div class="rounded-2xl flex w-full">
+  <div class="flex w-full h-auto m-auto bg-white rounded-xl overflow-hidden">
+
+    <table class="w-1/4 border-r">
+      <thead class="w-15">
+        <tr>
+          <th>Tareas</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @if (arrMonth$ | async) {
+          <tr>
+            <td class="text-transparent">.</td>
+          </tr> 
+        }
+        @if(tasksData$){
+          <div class="w-64 overflow-x-scroll p-1">
+          @for (task of tasksData$ | async; track task.id) {
+            
+              <tr class="flex text-nowrap items-center text-center gap-2 text-slate-700 hover:text-blue-500 cursor-pointer rounded-3xl px-1 uppercase m-1">
+                <td>{{task.name}}</td>
+              </tr>
+            
+          }
+        </div>
+        }
+      </tbody>
+    </table>
+
+    <div class="bg-white overflow-x-scroll w-3/4 h-full">
+      <table class="calendario">
+        @if(arrMonth$  | async ){
+          <tr>
+            @for (mes of arrMonth$ | async; track $index) {
+            <!-- Encabezados de los meses -->
+            <th class="cursor-pointer hover:text-blue-500"
+              [colSpan]="mes.dias.length">{{ mes.nombre.toUpperCase() }}</th>
+            }
+          </tr>
+        }@else {
+          <tr>
+            <th colspan="7">MESES DEL PROYECTO</th>
+          </tr>
+        }
+        
+        <tr class="bg-slate-100 overflow-hidden">
+          @for (mes of arrMonth$ | async; track $index) {
+          @for (dia of mes.dias; track $index) {
+          <!-- Días del calendario -->
+          <td class="bg-slate-200">
+            <div class="overflow-visible w-[10px]">
+              <span class="text-[10px]">{{ dia }}</span>
+            </div>
+          </td>
+          } }
+        </tr>
+        @if(tasksData$ |async; as data){
+        @for (tarea of data; track $index) {
+        <tr class="relative overflow-hidden">
+          @for (mes of arrMonth$ | async; track $index) { 
+            @for (dia of mes.dias; track $index) {
+          <!-- barra de dias -->
+          <td class="bg-white">
+            @if (getMonthFromDate(tarea.startDate!) === mes.numero) {
+            @if ($index +1 === obtenerDia(tarea.startDate!)) {
+            <div
+              class="bg-blue-500 absolute h-5 rounded-lg top-1 overflow-hidden text-white text-sm"
+              [style.width.px]="obtenerCantidadDias(tarea.startDate!,tarea.endDate!)*27"
+              style="box-shadow: -2px 2px 2px 1px rgba(0, 0, 0, 0.2)">
+              del
+              {{$index + 1}}
+              -
+              {{obtenerDia(tarea.endDate!)}}
+            </div>
+            }
+            }
+          </td>
+          } }
+        </tr>
+        }
+        }
+      </table>
+    </div>
+
+  </div>
+</div>
